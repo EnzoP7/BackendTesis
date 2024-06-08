@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Cliente {
+  id                            Int        @id @default(autoincrement())
+  nombre                        String
+  apellido1                     String
+  apellido2                     String?
+  domicilio                     String
+  ciudad                        String
+  pais                          String
+  licencia                      Int        @unique
+  licenciaEmitida               DateTime
+  licenciaVencimiento           DateTime
+  mail                          String?    @unique
+  telefono                      Int?       @unique
+  rut                           String?
+  clienteValido                 Boolean?   @default(true)
+  Arrendatario                  Alquiler[] @relation("arrendatario")
+  ConductorAutorizado_fiador    Alquiler[] @relation("ConductorAutorizado_fiador")
+  ConductorAutorizado_YO_fiador Alquiler[] @relation("ConductorAutorizado_YO_Fiador")
+
+  @@unique([nombre, apellido1, apellido2])
+}
+
+// SI ACTIVO EL UNIQUE , CUANDO DEJO REGFISTROS EN NULL NO ME DEJA REPETIRLOS POR LA CONDICION UNIQUE, HATY QUE BER Q ONDA
+model Vehiculo {
+  id             Int        @id @default(autoincrement())
+  matricula      String //@unique
+  padron         String? //@unique
+  codigoNacional Int? //  @unique
+  divNum         Int? // @unique
+  marca          String
+  modelo         String
+  anio           Int
+  kilometros     Int
+  color          String
+  tipo           String
+  combustible    String?
+  numeroMotor    String?
+  numeroChasis   String?
+  ciRut          String?
+  empadronado    DateTime?
+  emitido        DateTime?
+  vehiculo       Alquiler[]
+}
+
+model Sucursal {
+  id             Int        @id
+  direccion      String     @unique
+  listaEmpleados Empleado[]
+}
+
+model Empleado {
+  id                     Int        @id @default(autoincrement())
+  mail                   String     @unique
+  password               String
+  cedula                 Int        @unique
+  nombre                 String
+  apellido               String
+  sucursal               Sucursal   @relation(fields: [sucursalId], references: [id])
+  sucursalId             Int
+  rol                    String
+  autorizadoExtendidoPor Alquiler[] @relation("Extendido_Autorizado_por")
+  entregadoPor           Alquiler[] @relation("Entrgado_por_empleado")
+  recibidoPor            Alquiler[] @relation("Recibido_por_empleado")
+}
+
+model Alquiler {
+  id                                Int       @id @default(autoincrement())
+  vehiculo                          Vehiculo  @relation(fields: [vehiculoId], references: [id])
+  vehiculoId                        Int // HASTA ACA VA FUNCANDO BIEN
+  Arrendatario                      Cliente   @relation("arrendatario", fields: [ArrendatarioId], references: [id])
+  ArrendatarioId                    Int
+  ConductorAutorizado_fiador        Cliente?  @relation("ConductorAutorizado_fiador", fields: [ConductorAutorizado_fiadorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ConductorAutorizado_fiadorId      Int?
+  ConductorAutorizado_YO_fiador     Cliente?  @relation("ConductorAutorizado_YO_Fiador", fields: [ConductorAutorizado_YO_fiador_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ConductorAutorizado_YO_fiador_id  Int?
+  garantiaImporte                   Int
+  garantiaMedio                     String
+  kilometrosLibre                   Boolean   @default(false)
+  precioAlquiler                    Int
+  combustibleSalida                 String
+  combustibleRegreso                String?
+  lugarDeSalida                     String
+  fechaDeSalida                     DateTime
+  horaDeSalida                      DateTime
+  lugarDeRegreso                    String?
+  fechaDeRegreso                    DateTime
+  horaDeRegreso                     DateTime
+  extendidoAl                       DateTime?
+  autorizadoExtendidoPor            Empleado? @relation("Extendido_Autorizado_por", fields: [autorizadoExtendidoPorEmpleado_Id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  autorizadoExtendidoPorEmpleado_Id Int?
+  kmEntrada                         Int?
+  kmSalida                          Int
+  kmRecorridos                      Int?
+  entregadoPor                      Empleado  @relation("Entrgado_por_empleado", fields: [entregadoEmpleadoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  entregadoEmpleadoId               Int
+  recibidoPor                       Empleado? @relation("Recibido_por_empleado", fields: [recibidoEmpleadoId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  recibidoEmpleadoId                Int?
+  // chequeoAutomovil Bytes[] //  Imagen en binario hay que ver que onda esto
+  gato_y_llave_de_rueda             Boolean   @default(true)
+  baliza                            Boolean   @default(true)
+  ruedaAuxiliar                     Boolean   @default(true)
+  documentos                        Boolean   @default(true)
+  botiquin                          Boolean   @default(true)
+  extintor                          Boolean   @default(true)
+  // ver temas de las firmas
+  modoDePago                        String
+  factura                           String?
+}
