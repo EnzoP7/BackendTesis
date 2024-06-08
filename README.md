@@ -22,52 +22,14 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+## PASOS INICIALES
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Bueno Muchachos lo primero que tendrian que hacer es crear el archivo .env ademas de instalar las dependencias claro
+respescto al .env deje un template de como luce hasta el momento .
 
-## Installation
+Posiblemente en la cadena de conexion de la base de datos a sql Server tengan que toquetear el SqlManagment configuration y activar algo pa que funque
+que no recuerdo bien que era pero cuando lean el error se van a dar ceunta que hay que hacer
 
-```bash
-$ npm install
-```
+## LEVANTAR LA APP
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+El comando es """ npm run start:dev """
